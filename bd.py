@@ -75,7 +75,6 @@ def cadastrarProdutos(conbd, nomeP, descricaoP, precoP, nomeC, descricaoC, qtd ,
             myCursor.execute(sql,valores)
             categoria_id = myCursor.fetchone()[0]
             
-
         if temFornecedor == False:
             sql = "INSERT INTO fornecedores(Nome,Contato,Endereco) VALUES (%s, %s, %s)"
             valores = (nomeF, contatoF, enderecoF)
@@ -114,6 +113,7 @@ def listarProdutos(conbd):
 
         for i in result:
             print(i)  
+
     except Exception as e:
         print(f"Algo deu errado: {e}")
     finally:
@@ -130,7 +130,7 @@ def atualizarProduto(conbd, nomeAntigo, nomeNovo, descricaoNova, precoNovo):
     except Exception as e:
         print(f"Algo deu errado: {e}")
     finally:
-        conbd.close() 
+        myCursor.close() 
 
 
 def deletarProduto(conbd, nome):
@@ -187,6 +187,7 @@ def listarFuncionarios(conbd):
 
         for i in result:
             print(i)
+
     except Exception as e:
          print(f"Algo deu errado: {e}")
     finally:
@@ -227,10 +228,10 @@ def cadastrarClientes(conbd, nome, sobrenome, cidade, codigoPostal, endereco):
         myCursor.execute(sql, valores)
         conbd.commit()
         print("Cliente cadastrado com sucesso!")
-        myCursor.close()
     except Exception as e:
         print(f"Algo deu errado: {e}")
-
+    finally:
+        myCursor.close()
 
 def listarClientes(conbd):
     myCursor = conbd.cursor()
@@ -388,7 +389,6 @@ def atualizarPromocao(
         myCursor.execute(sql, valores)
         conbd.commit()
         print("Promoção atualizada com sucesso!")
-        myCursor.close()
     except Exception as e:
         print(f"Algo deu errado: {e}")
     finally:
@@ -403,7 +403,6 @@ def deletarPromocao(conbd, nome):
         myCursor.execute(sql, valores)
         myCursor.commit()
         print("Promoção deletada com sucesso")
-        myCursor.close()
     except Exception as e:
         print(f"Algo deu errado: {e}")
     finally:
@@ -411,10 +410,10 @@ def deletarPromocao(conbd, nome):
 
 def fazerPedido(conbd, nomeP, qtd, nomeC,sobrenomeC,cidadeC,codigoPostalC, enderecoC,clienteExiste,avaliacaoCA,comentarioCA,dataCA,dataP,metodoP):
     myCursor = conbd.cursor()
-
-    id_produto = obterProdutoID(conbd, nomeP,)
-    id_cliente = ''
     try:
+        id_produto = obterProdutoID(conbd, nomeP,)
+        id_cliente = ''
+    
         sqlPreco = "SELECT * FROM produtos WHERE ID_Produto = %s"
         valorPreco = (id_produto,)
         myCursor.execute(sqlPreco, valorPreco)
@@ -435,7 +434,6 @@ def fazerPedido(conbd, nomeP, qtd, nomeC,sobrenomeC,cidadeC,codigoPostalC, ender
 
         sql = "INSERT INTO pedidos(Data_Pedido, ID_Cliente, Total) VALUES(%s,%s,%s)"
         valores = (dataP, id_cliente, total)
-        print("dataPedido, id_cliente, total => ", dataP, id_cliente, total)
         myCursor.execute(sql, valores)
         id_pedido = myCursor.lastrowid
 

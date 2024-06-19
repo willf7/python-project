@@ -39,6 +39,7 @@ while True:
                     enderecoF = ""
                     temFBool = True
                 cadastrarProdutos(conbd, nomeP, descricaoP, precoP, nomeC, descricaoC, qtd, nomeF, contatoF, enderecoF, temCBool, temFBool)
+                break
             elif choiceProduto == 2:
                 listarProdutos(conbd)
             elif choiceProduto == 3:
